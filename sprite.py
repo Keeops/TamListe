@@ -113,7 +113,7 @@ def main(ISJUMP, BATU_JUMPVALUE, CANJUMP, BATU_FALLVALUE):
 					RIGHT = False
 					LEFT = False
 					walkCount = 0
-					if ((batu.colliderect(ground) or batu.colliderect(platform_1_rect)) and ISJUMP == False):
+					if ((batu.colliderect(ground)) and ISJUMP == False):
 						CANJUMP = True
 				if (event.type == pygame.K_s):
 					if (keys_pressed[pygame.K_s] and batu.y + 1 <= (HEIGHT-IMG_HEIGHT)): #down
