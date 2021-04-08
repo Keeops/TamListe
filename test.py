@@ -56,9 +56,8 @@ class Player(object):
 		self.x = x
 		self.y = y
 		self.Velocity = 5
-		self.jumpValue, self.fallValue = 20, 1
+		self.jumpValue= 20
 		self.jumping = False
-		self.falling = False
 		self.img = BATU
 		self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
 		self.collide_list = []
@@ -72,21 +71,12 @@ class Player(object):
 			else:
 				self.jumpValue = 20
 				self.jumping = False
-				self.falling = True
 
-		elif (self.falling and not self.collide_list):
-			if (self.fallValue <= 5):
-				self.rect.y += self.fallValue
-				self.fallValue += 1
-			if (self.fallValue > 5):
-				self.rect.y += 5
-				self.jumping = False
-				self.falling = True
+		
 
 		# if the player on air
 		elif (self.rect.y + 5 + IMG_HEIGHT <= 1080-30 and not self.collide_list):
 			self.rect.y += 5
-			self.falling = True
 			self.jumping = False
 
 		# if the player on ground
@@ -94,7 +84,6 @@ class Player(object):
 			if (self.rect.bottom == self.collide_list[0].rect.top):
 				self.rect.bottom = self.collide_list[0].rect.top
 
-			self.falling = False
 			self.jumping = False
 
 		
@@ -116,7 +105,6 @@ class Player(object):
 		elif (ground not in self.collide_list and self.collide_list):
 			if (self.rect.x == self.collide_list[0].rect.right):
 				self.rect.x = self.collide_list[0].rect.right
-				self.falling = True
 
 		# if the player on ground and platform is left of the player
 		elif (ground in self.collide_list and len(self.collide_list) >= 2):
@@ -140,7 +128,6 @@ class Player(object):
 		elif (ground not in self.collide_list and self.collide_list):
 			if (self.rect.x + IMG_WIDTH == self.collide_list[0].rect.left):
 				self.rect.x = self.collide_list[0].rect.left - IMG_WIDTH
-				self.falling = True
 
 		# if the player on ground and platform is right of the player
 		elif (ground in self.collide_list and len(self.collide_list) >= 2):
@@ -153,7 +140,6 @@ class Player(object):
 
 	def jump(self):
 		self.jumping = True
-		self.falling = False
 
 			
 	
@@ -231,7 +217,7 @@ def main():
 					menu.main()
 				
 				if (event.key == pygame.K_w or event.key == pygame.K_SPACE):
-					if not(batu.jumping or batu.falling) and batu.collide_list:
+					if not(batu.jumping) and batu.collide_list:
 						batu.jump()
 						
 
