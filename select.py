@@ -36,10 +36,6 @@ WHITE = (255, 255, 255)
 RED = (255,0,0)
 BLACK = (0,0,0)
 
-# CHARACTERS
-CHARACTERS = [None, None, None, None]
-CUR_CHAR = None
-
 class Character(object):
 	"""docstring for Character"""
 	def __init__(self,img,x,y,name):
@@ -86,7 +82,7 @@ class Ok(object):
 		
 
 
-def draw(character, buttons,oks):
+def draw(character, buttons, oks):
 	screen.blit(BACKGROUND, (0,0))
 	character.draw(character.img,character.x, character.y)
 	for ok in oks:
@@ -149,7 +145,7 @@ def main():
 
 					# Play button 
 					if (clicked_rects and clicked_rects[0] == selectbutton):
-						test.main()
+						test.main(CUR_CHAR)
 
 					# Right button
 					if (clicked_rects and clicked_rects[0] == oksag):

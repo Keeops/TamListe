@@ -174,18 +174,18 @@ class Platform(object):
 
 
 
-def draw_window(batu,platform_group):
+def draw_window(player,platform_group):
 	screen.blit(BACKGROUND, (0,0))
 	for platform in platform_group:
 		platform.draw()
-	batu.update(platform_group)
-	batu.draw()
+	player.update(platform_group)
+	player.draw()
 	pygame.display.update()
 
-def main():
+def main(cur_char):
 	run = True
 	clock = pygame.time.Clock()
-	batu = Player(BATU,IMG_WIDTH, IMG_HEIGHT, 0, 1080-IMG_HEIGHT-530)
+	player = Player(cur_char.img,IMG_WIDTH, IMG_HEIGHT, 0, 1080-IMG_HEIGHT-530)
 	ground = Platform(1920, 30, 0, 1080-30)
 	platform1 = Platform(200, 30, 300, 950)
 	platform2 = Platform(200, 30, 700, 750)
@@ -198,20 +198,20 @@ def main():
 	platform_group = [ground,platform1,platform2,platform3,platform4,platform5,platform6,platform7,platform8]
 	while (run):
 		clock.tick(FPS)
-		draw_window(batu,platform_group)
+		draw_window(player,platform_group)
 		keys_pressed = pygame.key.get_pressed()
 		# Horizantally movement
 		if (keys_pressed[pygame.K_a]):
-			batu.move_left(platform_group,ground)
+			player.move_left(platform_group,ground)
 		elif (keys_pressed[pygame.K_d]):
-			batu.move_right(platform_group,ground)
+			player.move_right(platform_group,ground)
 
 		# Check collide to platform
 		for platform in platform_group:
-			if (batu.rect.colliderect(platform) and platform not in batu.collide_list):
-				batu.collide_list.append(platform)
-			elif(not batu.rect.colliderect(platform)) and platform in batu.collide_list:
-				batu.collide_list.remove(platform)
+			if (player.rect.colliderect(platform) and platform not in player.collide_list):
+				player.collide_list.append(platform)
+			elif(not player.rect.colliderect(platform)) and platform in player.collide_list:
+				player.collide_list.remove(platform)
 
 		for event in pygame.event.get():
 			if (event.type == pygame.QUIT):
@@ -224,8 +224,8 @@ def main():
 					menu.main()
 				
 				if (event.key == pygame.K_w or event.key == pygame.K_SPACE):
-					if not(batu.jumping) and batu.collide_list:
-						batu.jump()
+					if not(player.jumping) and player.collide_list:
+						player.jump()
 						
 
 if __name__ == '__main__':
