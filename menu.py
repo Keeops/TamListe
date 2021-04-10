@@ -1,5 +1,6 @@
 import pygame
 import test
+import select
 import os
 pygame.font.init()
 pygame.mixer.init()
@@ -30,6 +31,7 @@ PLATFORM_RAW = pygame.image.load(os.path.join("assets", "platform.png"))
 WHITE = (255, 255, 255)
 RED = (255,0,0)
 BLACK = (0,0,0)
+
 
 def draw_menu(buttons):
 	screen.blit(BACKGROUND, (0,0))
@@ -91,7 +93,7 @@ def main():
 					
 					# Play button 
 					if (clicked_rects and clicked_rects[0] == playbutton):
-						test.main()
+						select.main()
 
 					# Settings button
 					elif (clicked_rects and clicked_rects[0] == settingsbutton):

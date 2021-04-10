@@ -1,4 +1,5 @@
 import pygame
+import select
 import menu
 import os
 pygame.font.init()
@@ -49,8 +50,9 @@ BLACK = (0,0,0)
 class Player(object):
 	"""docstring for Player"""
 
-	def __init__(self, width, height, x, y):
+	def __init__(self, img, width, height, x, y):
 		super().__init__()
+		self.img = img
 		self.width = width
 		self.height = height
 		self.x = x
@@ -58,35 +60,44 @@ class Player(object):
 		self.Velocity = 5
 		self.jumpValue= 20
 		self.jumping = False
-		self.img = BATU
 		self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
 		self.collide_list = []
 
 	def update(self, platform_group):
 
 		if (self.jumping):
-			if (self.jumpValue > 0):
-				self.rect.y -= self.jumpValue
-				self.jumpValue -= 1
-			else:
+			if self.collide_list and self.collide_list[0].rect.collidepoint(self.rect.x + IMG_WIDTH/2, self.rect.top):
+				self.rect.top = self.collide_list[0].rect.bottom
 				self.jumpValue = 20
 				self.jumping = False
+			
+			else:
+				if (self.jumpValue > 0):
+					self.rect.y -= self.jumpValue
+					self.jumpValue -= 1
+				else: 
+					self.jumpValue = 20
+					self.jumping = False
 
-		
-
-		# if the player on air
-		elif (self.rect.y + 5 + IMG_HEIGHT <= 1080-30 and not self.collide_list):
-			self.rect.y += 5
-			self.jumping = False
-
-		# if the player on ground
 		elif (self.collide_list):
+			# if the player on ground
 			if (self.rect.bottom == self.collide_list[0].rect.top):
 				self.rect.bottom = self.collide_list[0].rect.top
 
+			# if the player hits his head
+			if (self.rect.top == self.collide_list[0].rect.bottom):
+				self.rect.top = self.collide_list[0].rect.bottom
+			
+			self.jumping = False
+
+		# if the player on air
+		elif (self.rect.y + 5 + IMG_HEIGHT <= 1080-25 and not self.collide_list):
+			self.rect.y += 5
 			self.jumping = False
 
 		
+		
+
 
 
 	def draw(self):
@@ -171,13 +182,10 @@ def draw_window(batu,platform_group):
 	batu.draw()
 	pygame.display.update()
 
-def start_menu():
-	pass
-
 def main():
 	run = True
 	clock = pygame.time.Clock()
-	batu = Player(IMG_WIDTH, IMG_HEIGHT, 0, 1080-IMG_HEIGHT-530)
+	batu = Player(BATU,IMG_WIDTH, IMG_HEIGHT, 0, 1080-IMG_HEIGHT-530)
 	ground = Platform(1920, 30, 0, 1080-30)
 	platform1 = Platform(200, 30, 300, 950)
 	platform2 = Platform(200, 30, 700, 750)
@@ -191,7 +199,6 @@ def main():
 	while (run):
 		clock.tick(FPS)
 		draw_window(batu,platform_group)
-		print(batu.rect.right, platform_group[1].rect.left)
 		keys_pressed = pygame.key.get_pressed()
 		# Horizantally movement
 		if (keys_pressed[pygame.K_a]):
