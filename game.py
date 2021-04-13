@@ -105,7 +105,7 @@ class Player():
 			self.rect.x -= self.Velocity
 
 		# if the player is on the air
-		elif (not self.collide_list):
+		elif (not self.collide_list) and (self.rect.x - self.Velocity >= 0):
 			self.rect.x -= self.Velocity
 
 		# if the player on air and platform is left of the player
@@ -119,7 +119,7 @@ class Player():
 				self.rect.x = self.collide_list[1].rect.right
 		
 		# if the player on the ground
-		elif (self.rect.x - self.Velocity <= 1920-IMG_WIDTH+1) and (ground in self.collide_list):
+		elif (self.rect.x - self.Velocity >= 0) and (ground in self.collide_list):
 			self.rect.x -= self.Velocity
 
 	def move_right(self,platform_group, ground):

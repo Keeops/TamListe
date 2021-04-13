@@ -1,5 +1,5 @@
 import menu
-import test
+import game
 import pygame
 import os
 pygame.font.init()
@@ -128,7 +128,7 @@ def main():
 			if (event.type == pygame.KEYDOWN):
 				if (event.key == pygame.K_ESCAPE):
 					run = False
-					pygame.quit()
+					menu.main()
 
 			if (event.type == pygame.MOUSEBUTTONDOWN):
 				pass
@@ -145,7 +145,7 @@ def main():
 
 					# Play button 
 					if (clicked_rects and clicked_rects[0] == selectbutton):
-						test.main(CUR_CHAR)
+						game.main(CUR_CHAR)
 
 					# Right button
 					if (clicked_rects and clicked_rects[0] == oksag):

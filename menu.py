@@ -1,5 +1,5 @@
 import pygame
-import test
+import game
 import select
 import os
 pygame.font.init()
@@ -9,7 +9,7 @@ pygame.display.init()
 # RESULATION,WINDOW SETTINGS
 FPS = 60
 WIDTH, HEIGHT = 1920, 1080
-IMG_WIDTH, IMG_HEIGHT = 101, 151
+IMG_WIDTH, IMG_HEIGHT = 100, 150
 screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN | pygame.SCALED)
 pygame.display.set_caption("Save the Asude")
 
@@ -25,7 +25,8 @@ PLATFORM_RAW = pygame.image.load(os.path.join("assets", "platform.png"))
 # INITIALIZING FONTS
 ## HIT = pygame.USEREVENT + 1
 
-
+# INITIALIZING SOUNDS
+TEMMUZ_SOUND = pygame.mixer.Sound(os.path.join("assets", "15temmuz.wav"))
 
 # COLORS
 WHITE = (255, 255, 255)
@@ -65,12 +66,14 @@ def main():
 	settingsbutton = Button(150, 500, 100,BLACK,"Settings")
 	quitbutton = Button(150, 600, 100,BLACK,"Quit")
 	buttons = [playbutton,settingsbutton,quitbutton]
+	TEMMUZ_SOUND.play()
 	while (run):
 		clock.tick(FPS)
 		draw_menu(buttons)
 		for event in pygame.event.get():
 			if (event.type == pygame.QUIT):
 				run = False
+				TEMMUZ_SOUND.stop()
 				pygame.quit()
 			
 			if (event.type == pygame.KEYDOWN):
@@ -93,6 +96,7 @@ def main():
 					
 					# Play button 
 					if (clicked_rects and clicked_rects[0] == playbutton):
+						TEMMUZ_SOUND.stop()
 						select.main()
 
 					# Settings button
@@ -101,6 +105,7 @@ def main():
 
 					# Quit Button
 					elif (clicked_rects and clicked_rects[0] == quitbutton):
+						TEMMUZ_SOUND.stop()
 						pygame.quit()
 		
 					clicking = False
