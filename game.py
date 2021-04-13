@@ -24,8 +24,8 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN | pygame.SCA
 pygame.display.set_caption("Save the Asude")
 
 # INITIALIZING IMAGES
-BATU_RAW = pygame.image.load(os.path.join("assets", "batur.png"))
-UMUT_RAW = pygame.image.load(os.path.join("assets", "duvarci.png"))
+BATU_RAW = pygame.image.load(os.path.join("assets", "batuv2.png"))
+UMUT_RAW = pygame.image.load(os.path.join("assets", "duvarciv2.png"))
 BACKGROUND_RAW = pygame.image.load(os.path.join("assets", "background.jpg"))
 GOAL_RAW = pygame.image.load(os.path.join("assets", "goal.jpg"))
 BATU = pygame.transform.scale(BATU_RAW, (IMG_WIDTH,IMG_HEIGHT))
