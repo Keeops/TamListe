@@ -15,7 +15,7 @@ pygame.display.set_caption("Save the Asude")
 
 # INITIALIZING IMAGES
 BATU_RAW = pygame.image.load(os.path.join("assets", "batur.png"))
-UMUT_RAW = pygame.image.load(os.path.join("assets", "umut.jpg"))
+UMUT_RAW = pygame.image.load(os.path.join("assets", "duvarci.png"))
 BACKGROUND_RAW = pygame.image.load(os.path.join("assets", "background.jpg"))
 BATU = pygame.transform.scale(BATU_RAW, (IMG_WIDTH,IMG_HEIGHT))
 UMUT = pygame.transform.scale(UMUT_RAW, (IMG_WIDTH,IMG_HEIGHT))

@@ -15,21 +15,22 @@ Bugs:
 
 """
 
-
-
 # RESULATION,WINDOW SETTINGS
 FPS = 60
 WIDTH, HEIGHT = 1920, 1080
 IMG_WIDTH, IMG_HEIGHT = 100, 150
+GOAL_WIDTH, GOAL_HEIGHT = 100, 100
 screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN | pygame.SCALED)
 pygame.display.set_caption("Save the Asude")
 
 # INITIALIZING IMAGES
 BATU_RAW = pygame.image.load(os.path.join("assets", "batur.png"))
-UMUT_RAW = pygame.image.load(os.path.join("assets", "umut.jpg"))
+UMUT_RAW = pygame.image.load(os.path.join("assets", "duvarci.png"))
 BACKGROUND_RAW = pygame.image.load(os.path.join("assets", "background.jpg"))
+GOAL_RAW = pygame.image.load(os.path.join("assets", "goal.jpg"))
 BATU = pygame.transform.scale(BATU_RAW, (IMG_WIDTH,IMG_HEIGHT))
 UMUT = pygame.transform.scale(UMUT_RAW, (IMG_WIDTH,IMG_HEIGHT))
+GOAL = pygame.transform.scale(GOAL_RAW, (GOAL_WIDTH, GOAL_HEIGHT))
 BACKGROUND = pygame.transform.scale(BACKGROUND_RAW, (WIDTH,HEIGHT))
 PLATFORM_RAW = pygame.image.load(os.path.join("assets", "platform.png"))
 
@@ -39,7 +40,7 @@ HP_FONT = pygame.font.SysFont("comicsans", 40)
 WINNER_FONT = pygame.font.SysFont("comicsans", 100)
 
 # INITIALIZING SOUNDS
-BRUH_SOUND = pygame.mixer.Sound(os.path.join("assets", "bruh.wav"))
+BRUH_SOUND = pygame.mixer.Sound(os.path.join("assets", "bruhv2.wav"))
 HIT_SOUND = pygame.mixer.Sound(os.path.join("assets", "hitsound.wav"))
 
 # COLORS
@@ -47,7 +48,7 @@ WHITE = (255, 255, 255)
 RED = (255,0,0)
 BLACK = (0,0,0)
 
-class Player(object):
+class Player():
 	"""docstring for Player"""
 
 	def __init__(self, img, width, height, x, y):
@@ -94,11 +95,6 @@ class Player(object):
 		elif (self.rect.y + 5 + IMG_HEIGHT <= 1080-25 and not self.collide_list):
 			self.rect.y += 5
 			self.jumping = False
-
-		
-		
-
-
 
 	def draw(self):
 		screen.blit(self.img, (self.rect.x, self.rect.y))
@@ -152,10 +148,7 @@ class Player(object):
 	def jump(self):
 		self.jumping = True
 
-			
-	
-
-class Platform(object):
+class Platform():
 	"""docstring for Platform"""
 	def __init__(self, width, height, x, y):
 		super().__init__()
@@ -169,23 +162,38 @@ class Platform(object):
 	def draw(self):
 		screen.blit(self.img, (self.rect.x, self.rect.y))
 
+class Goal():
+	"""docstring for Goal"""
+	def __init__(self, x, y, img):
+		super().__init__()
+		self.x = x
+		self.y = y
+		self.img = img
+		self.rect = pygame.Rect(self.x, self.y, GOAL_WIDTH, GOAL_HEIGHT)
 
+	def draw(self):
+		screen.blit(self.img, (self.rect.x, self.rect.y))
+		
 
-
-
-
-def draw_window(player,platform_group):
+def draw_window(player,platform_group,goal):
 	screen.blit(BACKGROUND, (0,0))
+	goal.draw()
 	for platform in platform_group:
 		platform.draw()
 	player.update(platform_group)
 	player.draw()
 	pygame.display.update()
 
+def draw_winner(text):
+    draw_text = WINNER_FONT.render(text, 1, RED)
+    screen.blit(draw_text, (WIDTH/2 - draw_text.get_width(), HEIGHT/2 - draw_text.get_height()/2))
+    pygame.display.update()
+    pygame.time.delay(5000)
+
 def main(cur_char):
 	run = True
 	clock = pygame.time.Clock()
-	player = Player(cur_char.img,IMG_WIDTH, IMG_HEIGHT, 0, 1080-IMG_HEIGHT-530)
+	player = Player(cur_char.img,IMG_WIDTH, IMG_HEIGHT, 0, 1080-IMG_HEIGHT-30)
 	ground = Platform(1920, 30, 0, 1080-30)
 	platform1 = Platform(200, 30, 300, 950)
 	platform2 = Platform(200, 30, 700, 750)
@@ -195,11 +203,13 @@ def main(cur_char):
 	platform6 = Platform(200, 30, 1200, 150)
 	platform7 = Platform(200, 30, 600, 150)
 	platform8 = Platform(200, 30, 200, 150)
+	goal = Goal(250, 50, GOAL)
 	platform_group = [ground,platform1,platform2,platform3,platform4,platform5,platform6,platform7,platform8]
 	while (run):
 		clock.tick(FPS)
-		draw_window(player,platform_group)
+		draw_window(player,platform_group,goal)
 		keys_pressed = pygame.key.get_pressed()
+		
 		# Horizantally movement
 		if (keys_pressed[pygame.K_a]):
 			player.move_left(platform_group,ground)
@@ -213,6 +223,11 @@ def main(cur_char):
 			elif(not player.rect.colliderect(platform)) and platform in player.collide_list:
 				player.collide_list.remove(platform)
 
+		# Check collide to GOAL
+		if (player.rect.colliderect(goal)):
+			draw_winner("ASUDE SAVED")
+			main(cur_char)
+
 		for event in pygame.event.get():
 			if (event.type == pygame.QUIT):
 				run = False
@@ -225,6 +240,7 @@ def main(cur_char):
 				
 				if (event.key == pygame.K_w or event.key == pygame.K_SPACE):
 					if not(player.jumping) and player.collide_list:
+						BRUH_SOUND.play()
 						player.jump()
 						
 
