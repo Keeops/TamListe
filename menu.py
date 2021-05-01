@@ -1,5 +1,4 @@
 import pygame
-import game
 import select
 import os
 pygame.font.init()
@@ -21,6 +20,7 @@ BATU = pygame.transform.scale(BATU_RAW, (IMG_WIDTH,IMG_HEIGHT))
 UMUT = pygame.transform.scale(UMUT_RAW, (IMG_WIDTH,IMG_HEIGHT))
 BACKGROUND = pygame.transform.scale(BACKGROUND_RAW, (WIDTH,HEIGHT))
 PLATFORM_RAW = pygame.image.load(os.path.join("assets", "platform.png"))
+PLAY_RAW = pygame.image.load(os.path.join("assets", "play.png"))
 
 # INITIALIZING FONTS
 ## HIT = pygame.USEREVENT + 1
